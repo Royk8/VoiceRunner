@@ -8,18 +8,19 @@ namespace Project.Scripts.Player
 {
     public class PlayerActions : MonoBehaviour
     {
-        [Header("Lanes Settings")]
-        [SerializeField] private int lanesNumber;
+        [Header("Lanes Settings")] [SerializeField]
+        private int lanesNumber;
+
         [SerializeField] private float laneWidth;
-        
-        [Header("Player Movement Settings")]
-        public float speed;
+
+        [Header("Player Movement Settings")] public float speed;
         [SerializeField] private float moveTime = 1f;
         [SerializeField] private AnimationCurve curve;
 
-        [Header("Jump Settings")]
-        [SerializeField]private float jumpTime = 1f;
-        [SerializeField]private float jumpHeight = 10f;
+        [Header("Jump Settings")] [SerializeField]
+        private float jumpTime = 1f;
+
+        [SerializeField] private float jumpHeight = 10f;
 
         public Action OnBark;
         public Action OnHurt;
@@ -31,8 +32,8 @@ namespace Project.Scripts.Player
 
         private int _lane;
         private bool moveLock;
-        
-        
+
+
         private void Start()
         {
             _lane = lanesNumber / 2;
@@ -50,7 +51,12 @@ namespace Project.Scripts.Player
             wordsToActions.Add("Derecha", MoveRight);
             wordsToActions.Add("Izquierda", MoveLeft);
             wordsToActions.Add("Salta", Jump);
-            VoiceRecognizer.Instance.MapActions(wordsToActions);
+            wordsToActions.Add("Right", MoveRight);
+            wordsToActions.Add("Left", MoveLeft);
+            wordsToActions.Add("Jump", Jump);
+            
+            VoiceRecognitionAPISelector apiSelector = new VoiceRecognitionAPISelector();
+            apiSelector.MapActions(wordsToActions);
         }
 
         private void CommandRecognized()
@@ -61,7 +67,7 @@ namespace Project.Scripts.Player
         private void MoveRight()
         {
             CommandRecognized();
-            if (_lane < lanesNumber -1)
+            if (_lane < lanesNumber - 1)
             {
                 StartCoroutine(MoveToLaneCoroutine(true));
                 _lane++;
@@ -102,7 +108,8 @@ namespace Project.Scripts.Player
             {
                 float delta = timePassed / moveTime;
                 transform.position = new Vector3(xStart + xMove * delta, transform.position.y, transform.position.z);
-                model.eulerAngles = new Vector3(transform.eulerAngles.x, curve.Evaluate(delta) * finalRotation, transform.eulerAngles.z);
+                model.eulerAngles = new Vector3(transform.eulerAngles.x, curve.Evaluate(delta) * finalRotation,
+                    transform.eulerAngles.z);
                 timePassed += Time.deltaTime;
                 yield return null;
             }
@@ -112,7 +119,7 @@ namespace Project.Scripts.Player
             moveLock = false;
         }
 
-        
+
         IEnumerator JumpCoroutine()
         {
             moveLock = true;
@@ -140,6 +147,5 @@ namespace Project.Scripts.Player
         {
             transform.position += new Vector3(laneWidth * (right ? 1 : -1), 0, 0);
         }
-    
     }
 }
