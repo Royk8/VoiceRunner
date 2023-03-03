@@ -1,15 +1,27 @@
+using System;
 using UnityEngine;
 
 namespace Project.Scripts.Player
 {
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(PlayerActions))]
     public class PlayerAnimations : MonoBehaviour
     {
-        private Animator _animator;
+        [SerializeField] private Animator _animator;
+        private PlayerActions _actions;
         void Start()
         {
-            _animator = GetComponent<Animator>();
+            _actions = GetComponent<PlayerActions>();
+            _actions.OnBark += Bark;
         }
-        
+
+        private void Bark()
+        {
+            _animator.SetTrigger("Bark");
+        }
+
+        private void OnDisable()
+        {
+            _actions.OnBark -= Bark;
+        }
     }
 }

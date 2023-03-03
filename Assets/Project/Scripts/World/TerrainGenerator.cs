@@ -38,6 +38,7 @@ namespace Project.Scripts.World
             {
                 GameObject oldestTile = tilePool.Dequeue();
                 oldestTile.transform.position = spawmerPosition + Vector3.forward * 50;
+                oldestTile.GetComponent<TerrainTile>().RegenerateObstacles();
                 tilePool.Enqueue(oldestTile);
             }
             else

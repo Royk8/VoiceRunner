@@ -21,9 +21,11 @@ namespace Project.Scripts.Player
         [SerializeField]private float jumpTime = 1f;
         [SerializeField]private float jumpHeight = 10f;
 
+        public Action OnBark;
+
         [Header("OtherSettings")] [SerializeField]
         private Transform model;
-        
+
         private int _lane;
         private bool moveLock;
         
@@ -48,8 +50,14 @@ namespace Project.Scripts.Player
             VoiceRecognizer.Instance.MapActions(wordsToActions);
         }
 
+        private void CommandRecognized()
+        {
+            OnBark?.Invoke();
+        }
+
         private void MoveRight()
         {
+            CommandRecognized();
             if (_lane < lanesNumber -1)
             {
                 StartCoroutine(MoveToLaneCoroutine(true));
@@ -59,6 +67,7 @@ namespace Project.Scripts.Player
 
         private void MoveLeft()
         {
+            CommandRecognized();
             if (_lane > 0)
             {
                 StartCoroutine(MoveToLaneCoroutine(false));
@@ -68,6 +77,7 @@ namespace Project.Scripts.Player
 
         private void Jump()
         {
+            CommandRecognized();
             StartCoroutine(JumpCoroutine());
         }
 
@@ -89,7 +99,6 @@ namespace Project.Scripts.Player
             {
                 float delta = timePassed / moveTime;
                 transform.position = new Vector3(xStart + xMove * delta, transform.position.y, transform.position.z);
-                Debug.Log($"Delta: {delta}, Evaluation: {curve.Evaluate(delta) * finalRotation}");
                 model.eulerAngles = new Vector3(transform.eulerAngles.x, curve.Evaluate(delta) * finalRotation, transform.eulerAngles.z);
                 timePassed += Time.deltaTime;
                 yield return null;
