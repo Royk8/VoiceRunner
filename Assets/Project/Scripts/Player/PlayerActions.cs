@@ -13,7 +13,7 @@ namespace Project.Scripts.Player
         [SerializeField] private float laneWidth;
         
         [Header("Player Movement Settings")]
-        [SerializeField] private float speed;
+        public float speed;
         [SerializeField] private float moveTime = 1f;
         [SerializeField] private AnimationCurve curve;
 
@@ -22,9 +22,12 @@ namespace Project.Scripts.Player
         [SerializeField]private float jumpHeight = 10f;
 
         public Action OnBark;
+        public Action OnHurt;
 
         [Header("OtherSettings")] [SerializeField]
         private Transform model;
+
+        [SerializeField] private ParticleSystem dust;
 
         private int _lane;
         private bool moveLock;
@@ -117,6 +120,7 @@ namespace Project.Scripts.Player
             float timePassed = 0.0f;
             float yStart = transform.position.y;
             float yJump = jumpHeight;
+            dust.Stop();
             while (timePassed < jumpTime)
             {
                 yJump += -(gravity * Time.deltaTime);
@@ -128,6 +132,7 @@ namespace Project.Scripts.Player
             }
 
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
+            dust.Play();
             moveLock = false;
         }
 

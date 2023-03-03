@@ -1,29 +1,34 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+namespace Project.Scripts.Player
 {
-    [SerializeField] private int maxHealth;
-    private int _currentHealth;
-
-    private void Start()
+    public class PlayerHealth : MonoBehaviour
     {
-        _currentHealth = maxHealth;
-    }
+        [SerializeField] private int maxHealth;
+        [SerializeField] private PlayerHealthUI _ui;
+        private PlayerActions _actions;
+        private int _currentHealth;
 
-    public void LoseHealth()
-    {
-        _currentHealth--;
-        if (_currentHealth < 1)
+        private void Start()
         {
-            Die();
+            _currentHealth = maxHealth;
+            _actions = GetComponent<PlayerActions>();
         }
-    }
 
-    private void Die()
-    {
-        Debug.Log("You DEAD");
+        public void LoseHealth()
+        {
+            _currentHealth--;
+            _ui.LoseOneHealth(_currentHealth);
+            _actions.OnHurt?.Invoke();
+            if (_currentHealth < 1)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            Debug.Log("You DEAD");
+        }
     }
 }

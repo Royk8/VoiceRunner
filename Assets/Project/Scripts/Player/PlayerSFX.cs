@@ -9,6 +9,7 @@ namespace Project.Scripts.Player
     public class PlayerSFX : MonoBehaviour
     {
         [SerializeField] private SoundCollection barks;
+        [SerializeField] private SoundCollection hurt;
         private AudioSource _audioSource;
         private PlayerActions _actions;
 
@@ -17,11 +18,17 @@ namespace Project.Scripts.Player
             _audioSource = GetComponent<AudioSource>();
             _actions = GetComponent<PlayerActions>();
             _actions.OnBark += Bark;
+            _actions.OnHurt += Hurt;
         }
 
         public void Bark()
         {
             _audioSource.PlayOneShot(barks.GetRandom());
+        }
+
+        public void Hurt()
+        {
+            _audioSource.PlayOneShot(hurt.GetRandom());
         }
         
         private void OnDisable()

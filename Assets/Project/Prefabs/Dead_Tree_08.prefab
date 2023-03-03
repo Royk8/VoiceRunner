@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 2529339515063167723}
   - component: {fileID: 4924795841999653116}
   - component: {fileID: 4912195850128961948}
+  - component: {fileID: -3323898442183335897}
   m_Layer: 0
   m_Name: Dead_Tree_08
   m_TagString: Untagged
@@ -157,8 +158,20 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3.63, z: 1}
+  m_Size: {x: 1, y: 3.63, z: 0.3}
   m_Center: {x: 0, y: 1.76, z: 0}
+--- !u!114 &-3323898442183335897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036955871788893115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976ed272970207a488b15016603de0fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3033033273071147235
 GameObject:
   m_ObjectHideFlags: 0

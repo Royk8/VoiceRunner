@@ -12,6 +12,12 @@ namespace Project.Scripts.Player
         {
             _actions = GetComponent<PlayerActions>();
             _actions.OnBark += Bark;
+            _actions.OnHurt += Hurt;
+        }
+
+        private void Hurt()
+        {
+            _animator.SetTrigger("Hurt");
         }
 
         private void Bark()
@@ -22,6 +28,7 @@ namespace Project.Scripts.Player
         private void OnDisable()
         {
             _actions.OnBark -= Bark;
+            _actions.OnHurt -= Hurt;
         }
     }
 }
