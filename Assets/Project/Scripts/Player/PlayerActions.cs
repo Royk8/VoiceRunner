@@ -24,6 +24,7 @@ namespace Project.Scripts.Player
 
         public Action OnBark;
         public Action OnHurt;
+        public Action OnDead;
 
         [Header("OtherSettings")] [SerializeField]
         private Transform model;
@@ -32,12 +33,20 @@ namespace Project.Scripts.Player
 
         private int _lane;
         private bool moveLock;
+        private VoiceRecognitionAPISelector apiSelector;
 
 
         private void Start()
         {
             _lane = lanesNumber / 2;
+            OnDead += Dead;
             SetActions();
+        }
+
+        private void Dead()
+        {
+            apiSelector.TurnOff();
+            speed = 0;
         }
 
         private void Update()
@@ -48,14 +57,14 @@ namespace Project.Scripts.Player
         private void SetActions()
         {
             Dictionary<string, Action> wordsToActions = new();
-            wordsToActions.Add("Derecha", MoveRight);
-            wordsToActions.Add("Izquierda", MoveLeft);
-            wordsToActions.Add("Salta", Jump);
-            wordsToActions.Add("Right", MoveRight);
-            wordsToActions.Add("Left", MoveLeft);
-            wordsToActions.Add("Jump", Jump);
+            wordsToActions.Add("derecha", MoveRight);
+            wordsToActions.Add("izquierda", MoveLeft);
+            wordsToActions.Add("salta", Jump);
+            wordsToActions.Add("right", MoveRight);
+            wordsToActions.Add("left", MoveLeft);
+            wordsToActions.Add("jump", Jump);
             
-            VoiceRecognitionAPISelector apiSelector = new VoiceRecognitionAPISelector();
+            apiSelector = new VoiceRecognitionAPISelector();
             apiSelector.MapActions(wordsToActions);
         }
 

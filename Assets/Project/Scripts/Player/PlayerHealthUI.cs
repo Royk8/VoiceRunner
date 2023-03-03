@@ -1,4 +1,5 @@
 using System.Collections;
+using Project.Scripts.Other;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ namespace Project.Scripts.Player
     {
         [SerializeField] private GameObject[] hearts;
         [SerializeField] private Image damaged;
+        [SerializeField] private EndGameController endGameController;
 
         public void LoseOneHealth(int current)
         {
@@ -23,7 +25,19 @@ namespace Project.Scripts.Player
             }
         }
 
-        IEnumerator GetDamagetCoroutine()
+        public void EndGameScreen()
+        {
+            StartCoroutine(EndScreenCoroutine());
+        }
+
+        private IEnumerator EndScreenCoroutine()
+        {
+            yield return new WaitForSeconds(3f);
+            endGameController.gameObject.SetActive(true);
+            endGameController.EndGameToggle();
+        }
+
+        private IEnumerator GetDamagetCoroutine()
         {
             float duration = 1f;
             float timepassed = 0;

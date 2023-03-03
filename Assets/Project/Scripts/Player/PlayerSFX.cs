@@ -10,6 +10,7 @@ namespace Project.Scripts.Player
     {
         [SerializeField] private SoundCollection barks;
         [SerializeField] private SoundCollection hurt;
+        [SerializeField] private SoundCollection dead;
         private AudioSource _audioSource;
         private PlayerActions _actions;
 
@@ -19,6 +20,12 @@ namespace Project.Scripts.Player
             _actions = GetComponent<PlayerActions>();
             _actions.OnBark += Bark;
             _actions.OnHurt += Hurt;
+            _actions.OnDead += Die;
+        }
+
+        private void Die()
+        {
+            _audioSource.PlayOneShot(dead.GetRandom());
         }
 
         public void Bark()
@@ -34,6 +41,8 @@ namespace Project.Scripts.Player
         private void OnDisable()
         {
             _actions.OnBark -= Bark;
+            _actions.OnDead -= Die;
+            _actions.OnHurt -= Hurt;
         }
     }
 }

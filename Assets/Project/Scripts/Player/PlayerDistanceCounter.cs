@@ -8,7 +8,7 @@ namespace Project.Scripts.Player
     {
         [SerializeField] private Text distanceText;
         private PlayerActions _actions;
-        private float distance;
+        public float distance { get; private set; }
 
         private void Start()
         {

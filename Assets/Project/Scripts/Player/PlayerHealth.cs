@@ -5,7 +5,7 @@ namespace Project.Scripts.Player
     public class PlayerHealth : MonoBehaviour
     {
         [SerializeField] private int maxHealth;
-        [SerializeField] private PlayerHealthUI _ui;
+        [SerializeField] private PlayerHealthUI ui;
         private PlayerActions _actions;
         private int _currentHealth;
 
@@ -18,17 +18,18 @@ namespace Project.Scripts.Player
         public void LoseHealth()
         {
             _currentHealth--;
-            _ui.LoseOneHealth(_currentHealth);
+            ui.LoseOneHealth(_currentHealth);
             _actions.OnHurt?.Invoke();
             if (_currentHealth < 1)
             {
                 Die();
+                ui.EndGameScreen();
             }
         }
 
         private void Die()
         {
-            Debug.Log("You DEAD");
+            _actions.OnDead?.Invoke();
         }
     }
 }

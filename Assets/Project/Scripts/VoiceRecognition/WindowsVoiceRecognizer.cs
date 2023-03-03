@@ -9,10 +9,10 @@ using UnityEngine;
 
 namespace Project.Scripts.VoiceRecognition
 {
-    public class VoiceRecognizer : MonoBehaviour, IRecognizer
+    public class WindowsVoiceRecognizer : MonoBehaviour, IRecognizer
     {
         #region Singleton
-            public static VoiceRecognizer Instance;
+            public static WindowsVoiceRecognizer Instance;
         
             private void Awake()
             {
@@ -40,6 +40,7 @@ namespace Project.Scripts.VoiceRecognition
         public void MapActions(Dictionary<string, Action> wordsToAction)
         {
         #if !UNITY_WEBGL || UNITY_EDITOR
+            Debug.Log("Mapeando windows speech");
             this.wordsToAction = wordsToAction;
             keywordRecognizer = new KeywordRecognizer(wordsToAction.Keys.ToArray());
             keywordRecognizer.OnPhraseRecognized += WordRecognized;
@@ -47,5 +48,14 @@ namespace Project.Scripts.VoiceRecognition
         #endif
         }
 
+        public void TurnOff()
+        {
+            keywordRecognizer.Stop();
+        }
+
+        public void TurnOn()
+        {
+            keywordRecognizer.Start();
+        }
     }
 }

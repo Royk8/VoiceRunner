@@ -13,6 +13,12 @@ namespace Project.Scripts.Player
             _actions = GetComponent<PlayerActions>();
             _actions.OnBark += Bark;
             _actions.OnHurt += Hurt;
+            _actions.OnDead += Die;
+        }
+
+        private void Die()
+        {
+            _animator.SetBool("Dead", true);
         }
 
         private void Hurt()
@@ -29,6 +35,7 @@ namespace Project.Scripts.Player
         {
             _actions.OnBark -= Bark;
             _actions.OnHurt -= Hurt;
+            _actions.OnDead -= Die;
         }
     }
 }
