@@ -19,7 +19,7 @@ namespace Project.Scripts.Other
             StartCoroutine(ResetSceneCoroutine());
         }
 
-        IEnumerator CountDistance(float target)
+        private IEnumerator CountDistance(float target)
         {
             float time = 1f;
             float timePassed = 0;
@@ -33,7 +33,7 @@ namespace Project.Scripts.Other
             endGameText.text = $"{Mathf.Floor(target)}m";
         }
 
-        IEnumerator ResetSceneCoroutine()
+        private IEnumerator ResetSceneCoroutine()
         {
             yield return new WaitForSeconds(5f);
             SceneManager.LoadScene(0);

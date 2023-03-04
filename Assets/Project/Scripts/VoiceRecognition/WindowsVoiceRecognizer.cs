@@ -25,15 +25,13 @@ namespace Project.Scripts.VoiceRecognition
             }
         #endregion
         
-
-        private Dictionary<string, Action> wordsToAction;
+        private Dictionary<string, Action> _wordsToAction;
         #if !UNITY_WEBGL || UNITY_EDITOR
-            private KeywordRecognizer keywordRecognizer;
+            private KeywordRecognizer _keywordRecognizer;
 
             private void WordRecognized(PhraseRecognizedEventArgs word)
             {
-                Debug.Log($"{word.confidence}, {word.text}");
-                wordsToAction[word.text].Invoke();
+                _wordsToAction[word.text].Invoke();
             }
         #endif
         
@@ -41,21 +39,25 @@ namespace Project.Scripts.VoiceRecognition
         {
         #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Mapeando windows speech");
-            this.wordsToAction = wordsToAction;
-            keywordRecognizer = new KeywordRecognizer(wordsToAction.Keys.ToArray());
-            keywordRecognizer.OnPhraseRecognized += WordRecognized;
-            keywordRecognizer.Start();
+            _wordsToAction = wordsToAction;
+            _keywordRecognizer = new KeywordRecognizer(wordsToAction.Keys.ToArray());
+            _keywordRecognizer.OnPhraseRecognized += WordRecognized;
+            _keywordRecognizer.Start();
         #endif
         }
 
         public void TurnOff()
         {
-            keywordRecognizer.Stop();
+            #if !UNITY_WEBGL || UNITY_EDITOR
+                _keywordRecognizer.Stop();
+            #endif
         }
 
         public void TurnOn()
         {
-            keywordRecognizer.Start();
+            #if !UNITY_WEBGL || UNITY_EDITOR
+                _keywordRecognizer.Start();
+            #endif
         }
     }
 }

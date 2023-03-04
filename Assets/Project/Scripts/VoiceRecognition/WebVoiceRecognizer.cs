@@ -32,10 +32,10 @@ namespace Project.Scripts.VoiceRecognition
             private static extern void SetUPRecognizer(string words);
         #endif
 
-        private void StartRecognizer()
+        private void RecognizerStart()
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
-                SetUPRecognizer("Hola,Salta,Derecha,Izquierda,Jump,Left,Right");
+                SetUPRecognizer("Hola,Salta,Derecha,Izquierda,Jump,Left,Right,Hello,Hi");
             #endif
         }
 
@@ -43,7 +43,7 @@ namespace Project.Scripts.VoiceRecognition
         {
             Debug.Log("Mapeando web api");
             _wordsToAction = wordsToAction;
-            StartRecognizer();
+            RecognizerStart();
         }
 
         public void TurnOff()
@@ -62,7 +62,6 @@ namespace Project.Scripts.VoiceRecognition
 
         public void OnFinalResult(string word)
         {
-            Debug.Log($"Unity word {word}");
             if (_wordsToAction.ContainsKey(word))
             {
                 _wordsToAction[word].Invoke();

@@ -31,6 +31,11 @@ namespace Project.Scripts.Player
             _animator.SetTrigger("Bark");
         }
 
+        public void SetState(int state)
+        {
+            _animator.SetInteger("State", state);
+        }
+
         private void OnDisable()
         {
             _actions.OnBark -= Bark;

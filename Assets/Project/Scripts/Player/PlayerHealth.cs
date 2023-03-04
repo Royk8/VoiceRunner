@@ -9,8 +9,9 @@ namespace Project.Scripts.Player
         private PlayerActions _actions;
         private int _currentHealth;
 
-        private void Start()
+        public void StartHealth()
         {
+            ui.gameObject.SetActive(true);
             _currentHealth = maxHealth;
             _actions = GetComponent<PlayerActions>();
         }

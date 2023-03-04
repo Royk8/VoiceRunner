@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Project.Scripts.VoiceRecognition;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Project.Scripts.Player
@@ -10,37 +11,41 @@ namespace Project.Scripts.Player
     {
         [Header("Lanes Settings")] [SerializeField]
         private int lanesNumber;
-
         [SerializeField] private float laneWidth;
 
-        [Header("Player Movement Settings")] public float speed;
+        [Header("Player Movement Settings")] public float runSpeed;
         [SerializeField] private float moveTime = 1f;
         [SerializeField] private AnimationCurve curve;
 
         [Header("Jump Settings")] [SerializeField]
         private float jumpTime = 1f;
-
         [SerializeField] private float jumpHeight = 10f;
-
-        public Action OnBark;
-        public Action OnHurt;
-        public Action OnDead;
 
         [Header("OtherSettings")] [SerializeField]
         private Transform model;
-
-        [SerializeField] private ParticleSystem dust;
+        public ParticleSystem dust;
 
         private int _lane;
         private bool moveLock;
+        private float speed;
         private VoiceRecognitionAPISelector apiSelector;
-
+        public Action OnBark;
+        public Action OnHurt;
+        public Action OnDead;
+        public Action OnStartGame;
 
         private void Start()
         {
             _lane = lanesNumber / 2;
             OnDead += Dead;
             SetActions();
+            moveLock = true;
+        }
+
+        public void StartPlayer()
+        {
+            moveLock = false;
+            speed = runSpeed;
         }
 
         private void Dead()
@@ -63,6 +68,9 @@ namespace Project.Scripts.Player
             wordsToActions.Add("right", MoveRight);
             wordsToActions.Add("left", MoveLeft);
             wordsToActions.Add("jump", Jump);
+            wordsToActions.Add("hola", StopIdling);
+            wordsToActions.Add("hello", StopIdling);
+            wordsToActions.Add("hi", StopIdling);
             
             apiSelector = new VoiceRecognitionAPISelector();
             apiSelector.MapActions(wordsToActions);
@@ -71,6 +79,12 @@ namespace Project.Scripts.Player
         private void CommandRecognized()
         {
             OnBark?.Invoke();
+        }
+
+        private void StopIdling()
+        {
+            CommandRecognized();
+            OnStartGame?.Invoke();
         }
 
         private void MoveRight()
@@ -131,12 +145,14 @@ namespace Project.Scripts.Player
 
         IEnumerator JumpCoroutine()
         {
+            if (moveLock) yield break;
             moveLock = true;
             float gravity = 9.81f;
             float timePassed = 0.0f;
             float yStart = transform.position.y;
             float yJump = jumpHeight;
             dust.Stop();
+            speed *= 1.5f;
             while (timePassed < jumpTime)
             {
                 yJump += -(gravity * Time.deltaTime);
@@ -147,14 +163,11 @@ namespace Project.Scripts.Player
                 yield return null;
             }
 
+            speed = runSpeed;
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
             dust.Play();
             moveLock = false;
         }
-
-        private void MoveToNextLane(bool right)
-        {
-            transform.position += new Vector3(laneWidth * (right ? 1 : -1), 0, 0);
-        }
+        
     }
 }
